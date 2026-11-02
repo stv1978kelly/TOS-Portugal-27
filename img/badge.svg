@@ -74,8 +74,8 @@
 
   <!-- banner: PORTUGAL 27 -->
   <g>
-    <path d="M 64 236 L 336 236 L 320 261 L 336 286 L 64 286 L 80 261 Z" fill="#d4a017"/>
-    <path d="M 74 242 L 326 242 L 313 261 L 326 280 L 74 280 L 87 261 Z" fill="#1a2a5c"/>
-    <text x="200" y="271" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="28" textLength="200" lengthAdjust="spacingAndGlyphs" fill="#ffffff" text-anchor="middle">PORTUGAL 27</text>
+    <path d="M 114 262 L 286 262 L 275 281 L 286 300 L 114 300 L 125 281 Z" fill="#d4a017"/>
+    <path d="M 121 267 L 279 267 L 271 281 L 279 295 L 121 295 L 129 281 Z" fill="#1a2a5c"/>
+    <text x="200" y="289" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="21" textLength="132" lengthAdjust="spacingAndGlyphs" fill="#ffffff" text-anchor="middle">PORTUGAL 27</text>
   </g>
 </svg>
