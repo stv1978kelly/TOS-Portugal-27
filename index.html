@@ -1340,7 +1340,7 @@ function renderOverall(days) {
 
   const n = played.filter(Boolean).length;
   document.getElementById('overallNote').textContent = n
-    ? 'Start = index on Day 1, Finish = index played off on the last day; pts = Stableford points for the tour. ' + n + ' day' + (n > 1 ? 's' : '') + ' counted. No card on a played day = ' + field + '. Level for 1st: countback on day points, last day back to Day 1. Other level totals split on total Stableford points.'
+    ? 'Start = index on Day 1, Finish = index played off on the last day; pts = Stableford points for the tour. ' + n + ' day' + (n > 1 ? 's' : '') + ' counted. No card on a played day = ' + field + '. Level for 1st: countback on day points, last day back to Day 1.'
     : 'No days played yet.';
 }
 
