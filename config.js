@@ -33,7 +33,7 @@ window.TOUR_CONFIG = {
   schedule: ['Salgados', 'Vale do Lobo Royal', 'Ombria'],
 
   // Home page. Badge, champions card and photos are optional (null / []).
-  badge: { src: 'img/badge.svg', alt: "Tam O'Shanter Overseas Golf - Portugal 27 badge" },
+  badge: { src: 'img/tam-oshanter-logo.svg', alt: "Tam O'Shanter Overseas Golf - Portugal 27" },
   champions: null,
   // champions: { title: 'Champions', photo: 'img/champs.jpg', current: 'Name', past: 'Name' },
   photos: [],

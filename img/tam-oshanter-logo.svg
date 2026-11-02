@@ -1,0 +1,163 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="800" height="800">
+  <title>Tam O'Shanter Overseas Golf · Portugal 27</title>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&amp;display=swap');
+      .arc   { font-family: Cinzel, 'Trajan Pro', Georgia, serif; font-weight: 900; }
+      .rib   { font-family: Cinzel, 'Trajan Pro', Georgia, serif; font-weight: 900; }
+    </style>
+
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f8dc84"/>
+      <stop offset=".5" stop-color="#d9a52a"/>
+      <stop offset="1" stop-color="#a67812"/>
+    </linearGradient>
+    <linearGradient id="goldText" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fbe4a0"/>
+      <stop offset="1" stop-color="#d8a330"/>
+    </linearGradient>
+    <radialGradient id="navy" cx=".5" cy=".4" r=".65">
+      <stop offset="0" stop-color="#2a3f86"/>
+      <stop offset="1" stop-color="#121d4a"/>
+    </radialGradient>
+    <radialGradient id="vignette" cx=".5" cy=".45" r=".55">
+      <stop offset=".55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity=".55"/>
+    </radialGradient>
+    <linearGradient id="steel" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8a929e"/>
+      <stop offset=".45" stop-color="#f1f3f6"/>
+      <stop offset="1" stop-color="#9aa2ad"/>
+    </linearGradient>
+    <linearGradient id="bonnet" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2f4592"/>
+      <stop offset="1" stop-color="#101a42"/>
+    </linearGradient>
+    <radialGradient id="ball" cx=".38" cy=".32" r=".7">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset=".7" stop-color="#e6e9ee"/>
+      <stop offset="1" stop-color="#aeb5c0"/>
+    </radialGradient>
+    <radialGradient id="toorie" cx=".35" cy=".3" r=".7">
+      <stop offset="0" stop-color="#ff5a5a"/>
+      <stop offset="1" stop-color="#9e0f1d"/>
+    </radialGradient>
+
+    <!-- Hunting-style tartan: green ground, navy blocks, red & gold overchecks -->
+    <pattern id="tartan" width="48" height="48" patternUnits="userSpaceOnUse">
+      <rect width="48" height="48" fill="#1c5a3a"/>
+      <rect x="0" width="18" height="48" fill="#13265a" opacity=".6"/>
+      <rect y="0" width="48" height="18" fill="#13265a" opacity=".6"/>
+      <rect x="36" width="5" height="48" fill="#08132e" opacity=".45"/>
+      <rect y="36" width="48" height="5" fill="#08132e" opacity=".45"/>
+      <rect x="27" width="2" height="48" fill="#c8102e" opacity=".85"/>
+      <rect y="27" width="48" height="2" fill="#c8102e" opacity=".85"/>
+      <rect x="8" width="1.4" height="48" fill="#e8c14a" opacity=".75"/>
+      <rect y="8" width="48" height="1.4" fill="#e8c14a" opacity=".75"/>
+    </pattern>
+    <pattern id="twill" width="4" height="4" patternUnits="userSpaceOnUse">
+      <path d="M0 4 L4 0" stroke="#000" stroke-width=".7" opacity=".18"/>
+    </pattern>
+    <!-- Diced (red/white) bonnet band -->
+    <pattern id="diced" width="10" height="10" patternUnits="userSpaceOnUse">
+      <rect width="10" height="10" fill="#f4efe4"/>
+      <rect width="5" height="5" fill="#c8102e"/>
+      <rect x="5" y="5" width="5" height="5" fill="#c8102e"/>
+    </pattern>
+
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="2.5" stdDeviation="2.2" flood-color="#000" flood-opacity=".5"/>
+    </filter>
+    <clipPath id="disc"><circle cx="200" cy="200" r="130"/></clipPath>
+
+    <path id="topArc" d="M 54 200 A 146 146 0 0 1 346 200"/>
+    <path id="botArc" d="M 30 200 A 170 170 0 0 0 370 200"/>
+    <path id="ribArc" d="M 60 271 Q 200 299 340 271"/>
+
+    <!-- One golf iron, drawn vertically, grip at top, head at bottom -->
+    <g id="club">
+      <rect x="-4.5" y="-80" width="9" height="34" rx="3.5" fill="#2b1a10"/>
+      <path d="M-4.5 -74 h9 M-4.5 -67 h9 M-4.5 -60 h9 M-4.5 -53 h9" stroke="#5a3a22" stroke-width="1.2"/>
+      <line x1="0" y1="-46" x2="0" y2="68" stroke="#5c636e" stroke-width="5.5" stroke-linecap="round"/>
+      <line x1="0" y1="-46" x2="0" y2="68" stroke="url(#steel)" stroke-width="3"/>
+      <path d="M-3.5 64 L3.5 64 L5 71 L27 69 Q34 69 33 77 Q32 86 23 86 L-2 86 Q-6 86 -5.5 81 Z"
+            fill="url(#steel)" stroke="#5c636e" stroke-width="1.2"/>
+      <path d="M6 75 h22 M5 79 h23 M5 83 h21" stroke="#7c8490" stroke-width=".8"/>
+    </g>
+  </defs>
+
+  <!-- Outer rings -->
+  <circle cx="200" cy="200" r="197" fill="url(#gold)"/>
+  <circle cx="200" cy="200" r="189" fill="url(#navy)"/>
+  <circle cx="200" cy="200" r="184" fill="none" stroke="#e7bf55" stroke-width="1.2"/>
+  <circle cx="200" cy="200" r="179" fill="none" stroke="#e7bf55" stroke-width="2"
+          stroke-dasharray="0.1 6" stroke-linecap="round" opacity=".8"/>
+
+  <!-- Arc lettering -->
+  <text class="arc" font-size="31" letter-spacing="4" fill="url(#goldText)">
+    <textPath href="#topArc" startOffset="50%" text-anchor="middle">TAM O'SHANTER</textPath>
+  </text>
+  <text class="arc" font-size="22" letter-spacing="5" fill="url(#goldText)">
+    <textPath href="#botArc" startOffset="50%" text-anchor="middle">OVERSEAS GOLF</textPath>
+  </text>
+
+  <!-- Stars either side -->
+  <g fill="#e7bf55">
+    <polygon points="42,190 44.6,197.4 52.5,197.6 46.2,202.4 48.5,210 42,205.5 35.5,210 37.8,202.4 31.5,197.6 39.4,197.4"/>
+    <polygon points="358,190 360.6,197.4 368.5,197.6 362.2,202.4 364.5,210 358,205.5 351.5,210 353.8,202.4 347.5,197.6 355.4,197.4"/>
+  </g>
+
+  <!-- Inner tartan disc -->
+  <circle cx="200" cy="200" r="135" fill="url(#gold)"/>
+  <g clip-path="url(#disc)">
+    <rect x="60" y="60" width="280" height="280" fill="url(#tartan)" transform="rotate(0)"/>
+    <rect x="60" y="60" width="280" height="280" fill="url(#twill)"/>
+    <circle cx="200" cy="200" r="130" fill="url(#vignette)"/>
+  </g>
+  <circle cx="200" cy="200" r="130" fill="none" stroke="#7a5a10" stroke-width="1"/>
+
+  <!-- Crossed clubs -->
+  <g filter="url(#shadow)">
+    <use href="#club" transform="translate(200 188) rotate(-42)"/>
+    <use href="#club" transform="translate(200 188) scale(-1 1) rotate(-42)"/>
+  </g>
+
+  <!-- Ball on tee -->
+  <g filter="url(#shadow)">
+    <path d="M185 207 L215 207 Q213 212 204 213 L201.5 236 L198.5 236 L196 213 Q187 212 185 207 Z"
+          fill="#f3e7c6" stroke="#9c7a2a" stroke-width="1"/>
+    <circle cx="200" cy="189" r="19" fill="url(#ball)" stroke="#8d96a3" stroke-width=".8"/>
+    <g fill="#b9c0ca" opacity=".75">
+      <circle cx="193" cy="181" r="1.6"/><circle cx="200" cy="179" r="1.6"/><circle cx="207" cy="181" r="1.6"/>
+      <circle cx="189" cy="188" r="1.6"/><circle cx="196" cy="186" r="1.6"/><circle cx="204" cy="186" r="1.6"/>
+      <circle cx="211" cy="188" r="1.6"/><circle cx="192" cy="194" r="1.6"/><circle cx="200" cy="193" r="1.6"/>
+      <circle cx="208" cy="194" r="1.6"/><circle cx="196" cy="200" r="1.6"/><circle cx="204" cy="200" r="1.6"/>
+    </g>
+  </g>
+
+  <!-- Tam o' Shanter bonnet, worn at a jaunty tilt -->
+  <g filter="url(#shadow)" transform="rotate(-6 200 112)">
+    <path d="M142 116 C136 94 176 80 204 81 C238 82 266 96 258 114 C240 124 160 126 142 116 Z"
+          fill="url(#bonnet)" stroke="#e7bf55" stroke-width="2"/>
+    <path d="M160 96 C178 86 214 84 236 92" fill="none" stroke="#fff" stroke-width="3"
+          stroke-linecap="round" opacity=".14"/>
+    <path d="M158 117 Q200 125 242 115 L242 128 Q200 139 158 130 Z"
+          fill="url(#diced)" stroke="#e7bf55" stroke-width="1.6"/>
+    <circle cx="204" cy="78" r="9" fill="url(#toorie)" stroke="#6e0a14" stroke-width="1"/>
+  </g>
+
+  <!-- Ribbon banner -->
+  <g filter="url(#shadow)">
+    <path d="M66 263 L102 257 L102 291 L66 297 L78 280 Z" fill="#a67812" stroke="#6e500c" stroke-width="1.2"/>
+    <path d="M334 263 L298 257 L298 291 L334 297 L322 280 Z" fill="#a67812" stroke="#6e500c" stroke-width="1.2"/>
+    <path d="M92 285 L102 291 L102 283 Z" fill="#5a4108"/>
+    <path d="M308 285 L298 291 L298 283 Z" fill="#5a4108"/>
+    <path d="M92 252 Q200 271 308 252 L308 284 Q200 303 92 284 Z"
+          fill="url(#gold)" stroke="#6e500c" stroke-width="1.4"/>
+    <path d="M96 256.5 Q200 275 304 256.5 M96 279.5 Q200 298 304 279.5"
+          fill="none" stroke="#13265a" stroke-width="1" opacity=".6"/>
+  </g>
+  <text class="rib" font-size="19" letter-spacing="2.5" fill="#13265a">
+    <textPath href="#ribArc" startOffset="50%" text-anchor="middle">PORTUGAL ’27</textPath>
+  </text>
+</svg>
