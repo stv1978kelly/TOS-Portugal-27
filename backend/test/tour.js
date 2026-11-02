@@ -49,7 +49,7 @@ t('the 10 players, page = script', () => {
 });
 t('page config: own id, title, badge, nothing carried over from another tour', () => {
   assert.strictEqual(cfg.id, 'tos-portugal-27');
-  assert.deepStrictEqual([cfg.title, cfg.subtitle], ["TAM O'SHANTER", 'Overseas Golf · Portugal 27']);
+  assert.deepStrictEqual([cfg.title, cfg.subtitle], ["TAM O'SHANTER", 'Overseas Golf · Portugal 26']);
   assert.ok(fs.existsSync(REPO + '/' + cfg.badge.src), 'badge file');
   assert.deepStrictEqual([cfg.champions, cfg.photos, cfg.sponsors], [null, [], []]);
   assert.ok(cfg.pinHash === 'PIN_NOT_SET' || /^[0-9a-f]{64}$/.test(cfg.pinHash), 'pinHash');

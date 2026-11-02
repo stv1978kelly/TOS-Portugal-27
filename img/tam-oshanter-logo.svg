@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="800" height="800">
-  <title>Tam O'Shanter Overseas Golf · Portugal 27</title>
+  <title>Tam O'Shanter Overseas Golf · Portugal 26</title>
   <defs>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&amp;display=swap');
@@ -158,6 +158,6 @@
           fill="none" stroke="#13265a" stroke-width="1" opacity=".6"/>
   </g>
   <text class="rib" font-size="19" letter-spacing="2.5" fill="#13265a">
-    <textPath href="#ribArc" startOffset="50%" text-anchor="middle">PORTUGAL ’27</textPath>
+    <textPath href="#ribArc" startOffset="50%" text-anchor="middle">PORTUGAL ’26</textPath>
   </text>
 </svg>

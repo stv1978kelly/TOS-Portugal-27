@@ -11,7 +11,7 @@ window.TOUR_CONFIG = {
 
   // Header: big title + small gold line under it. Also used for the browser tab.
   title: "TAM O'SHANTER",
-  subtitle: 'Overseas Golf · Portugal 27',
+  subtitle: 'Overseas Golf · Portugal 26',
 
   // Google Apps Script web app URL (ends /exec) - see backend/SETUP.md.
   webAppUrl: 'https://script.google.com/macros/s/AKfycbxpHz6rLlwPbPfzyfWvv8JbaRbH5DJS0Cue-JW1F7g2koPB01_sNRwOkt01ED6kAp6W/exec',
@@ -33,7 +33,7 @@ window.TOUR_CONFIG = {
   schedule: ['Salgados', 'Vale do Lobo Royal', 'Ombria'],
 
   // Home page. Badge, champions card and photos are optional (null / []).
-  badge: { src: 'img/tam-oshanter-logo.svg', alt: "Tam O'Shanter Overseas Golf - Portugal 27" },
+  badge: { src: 'img/tam-oshanter-logo.svg', alt: "Tam O'Shanter Overseas Golf - Portugal 26" },
   champions: null,
   // champions: { title: 'Champions', photo: 'img/champs.jpg', current: 'Name', past: 'Name' },
   photos: [],
