@@ -19,9 +19,9 @@ window.TOUR_CONFIG = {
   // Score card PIN: only a salted SHA-256 lives here (sites are public).
   // New PIN:  node -e "console.log(require('crypto').createHash('sha256').update('<salt><pin>').digest('hex'))"
   // and set the same PIN as Script Property CARD_PIN on the sheet's script.
-  // Set when the PIN is chosen (see backend/SETUP.md step 6); until then no PIN opens the card.
+  // Salted hash of the card PIN; the PIN itself is only the sheet's Script Property CARD_PIN.
   pinSalt: 'tos-portugal-27:',
-  pinHash: 'PIN_NOT_SET',
+  pinHash: '526ab8722e8a533959519f5b4bd9d0326fd8430cfa6c5fb36c90f3419da1a2fb',
 
   // Players, in the order they appear in the dropdowns.
   players: [
