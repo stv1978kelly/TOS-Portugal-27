@@ -14,7 +14,7 @@ window.TOUR_CONFIG = {
   subtitle: 'Overseas Golf · Portugal 27',
 
   // Google Apps Script web app URL (ends /exec) - see backend/SETUP.md.
-  webAppUrl: 'PASTE_NEW_WEBAPP_URL',
+  webAppUrl: 'https://script.google.com/macros/s/AKfycbxpHz6rLlwPbPfzyfWvv8JbaRbH5DJS0Cue-JW1F7g2koPB01_sNRwOkt01ED6kAp6W/exec',
 
   // Score card PIN: only a salted SHA-256 lives here (sites are public).
   // New PIN:  node -e "console.log(require('crypto').createHash('sha256').update('<salt><pin>').digest('hex'))"
