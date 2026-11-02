@@ -27,7 +27,7 @@
   <text font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="30" letter-spacing="4" fill="#d4a017" text-anchor="middle">
     <textPath href="#arcTop" startOffset="50%">TAM O'SHANTER</textPath>
   </text>
-  <text font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="26" letter-spacing="4" fill="#d4a017" text-anchor="middle" dominant-baseline="hanging">
+  <text font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="24" letter-spacing="3" fill="#d4a017" text-anchor="middle" dominant-baseline="hanging">
     <textPath href="#arcBottom" startOffset="50%">OVERSEAS GOLF</textPath>
   </text>
   <!-- stars between the words -->
@@ -42,15 +42,15 @@
 
   <!-- crossed clubs -->
   <g stroke-linecap="round">
-    <g transform="rotate(-38 200 200)">
-      <line x1="200" y1="132" x2="200" y2="262" stroke="#e8e0c8" stroke-width="6"/>
-      <line x1="200" y1="132" x2="200" y2="166" stroke="#1a1a1a" stroke-width="8"/>
-      <path d="M 200 258 q 0 12 -26 12 q -8 0 -8 -6 q 0 -6 34 -12 z" fill="#e8e0c8"/>
+    <g transform="rotate(-38 200 190)">
+      <line x1="200" y1="125" x2="200" y2="248" stroke="#e8e0c8" stroke-width="6"/>
+      <line x1="200" y1="125" x2="200" y2="158" stroke="#1a1a1a" stroke-width="8"/>
+      <path d="M 200 244 q 0 12 -26 12 q -8 0 -8 -6 q 0 -6 34 -12 z" fill="#e8e0c8"/>
     </g>
-    <g transform="rotate(38 200 200)">
-      <line x1="200" y1="132" x2="200" y2="262" stroke="#e8e0c8" stroke-width="6"/>
-      <line x1="200" y1="132" x2="200" y2="166" stroke="#1a1a1a" stroke-width="8"/>
-      <path d="M 200 258 q 0 12 26 12 q 8 0 8 -6 q 0 -6 -34 -12 z" fill="#e8e0c8"/>
+    <g transform="rotate(38 200 190)">
+      <line x1="200" y1="125" x2="200" y2="248" stroke="#e8e0c8" stroke-width="6"/>
+      <line x1="200" y1="125" x2="200" y2="158" stroke="#1a1a1a" stroke-width="8"/>
+      <path d="M 200 244 q 0 12 26 12 q 8 0 8 -6 q 0 -6 -34 -12 z" fill="#e8e0c8"/>
     </g>
   </g>
 
@@ -64,18 +64,18 @@
 
   <!-- ball on the tee -->
   <g>
-    <path d="M 194 232 L 206 232 L 202 246 L 198 246 Z" fill="#d4a017"/>
-    <circle cx="200" cy="218" r="15" fill="url(#ball)" stroke="#0d1830" stroke-width="1"/>
+    <path d="M 194 218 L 206 218 L 202 232 L 198 232 Z" fill="#d4a017"/>
+    <circle cx="200" cy="204" r="15" fill="url(#ball)" stroke="#0d1830" stroke-width="1"/>
     <g fill="#b8c0d0">
-      <circle cx="195" cy="213" r="1.6"/><circle cx="202" cy="211" r="1.6"/><circle cx="207" cy="217" r="1.6"/>
-      <circle cx="196" cy="221" r="1.6"/><circle cx="203" cy="224" r="1.6"/>
+      <circle cx="195" cy="199" r="1.6"/><circle cx="202" cy="197" r="1.6"/><circle cx="207" cy="203" r="1.6"/>
+      <circle cx="196" cy="207" r="1.6"/><circle cx="203" cy="210" r="1.6"/>
     </g>
   </g>
 
   <!-- banner: PORTUGAL 27 -->
   <g>
-    <path d="M 98 262 L 302 262 L 290 280 L 302 298 L 98 298 L 110 280 Z" fill="#d4a017"/>
-    <path d="M 108 266 L 292 266 L 283 280 L 292 294 L 108 294 L 117 280 Z" fill="#1a2a5c"/>
-    <text x="200" y="288" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="22" letter-spacing="3" fill="#ffffff" text-anchor="middle">PORTUGAL 27</text>
+    <path d="M 64 236 L 336 236 L 320 261 L 336 286 L 64 286 L 80 261 Z" fill="#d4a017"/>
+    <path d="M 74 242 L 326 242 L 313 261 L 326 280 L 74 280 L 87 261 Z" fill="#1a2a5c"/>
+    <text x="200" y="271" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="28" textLength="200" lengthAdjust="spacingAndGlyphs" fill="#ffffff" text-anchor="middle">PORTUGAL 27</text>
   </g>
 </svg>
