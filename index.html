@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Golf Score Card</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #1a2a5c;
+    min-height: 100vh;
+    padding: 12px;
+  }
+
+  .card-container { max-width: 960px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #2a3f7a 0%, #1a2a5c 50%, #0d1830 100%);
+    border-radius: 14px 14px 0 0;
+    padding: 20px 24px;
+    text-align: center;
+    border-bottom: 4px solid #d4a017;
+    position: relative;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2em;
+    color: #fff;
+    letter-spacing: 2px;
+  }
+  .header .subtitle {
+    font-size: 0.85em;
+    color: #d4a017;
+    margin-top: 4px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .golf-icon { font-size: 1.4em; margin: 0 6px; }
+
+  /* Card body */
+  .card-body {
+    background: #fff;
+    padding: 20px 20px 28px;
+    border-radius: 0 0 14px 14px;
+    box-shadow: 0 16px 50px rgba(0,0,0,0.3);
+  }
+
+  /* Info row */
+  .info-row { display: flex; gap: 16px; margin-bottom: 20px; }
+  .info-group { flex: 1; }
+  .info-group label {
+    display: block;
+    font-weight: 700;
+    font-size: 0.7em;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #1a2a5c;
+    margin-bottom: 6px;
+  }
+  .info-group select, .info-group input[type="date"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #c8cfe0;
+    border-radius: 8px;
+    font-size: 0.9em;
+    font-family: 'Inter', sans-serif;
+    color: #333;
+    background: #f5f7fc;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+  }
+  .info-group select {
+    background: #f5f7fc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%231a2a5c' d='M6 8L0 0h12z'/%3E%3C/svg%3E") no-repeat right 12px center;
+    padding-right: 36px;
+  }
+  .info-group select:focus, .info-group input[type="date"]:focus {
+    outline: none;
+    border-color: #1a2a5c;
+    box-shadow: 0 0 0 3px rgba(26,42,92,0.12);
+  }
+
+  /* Course name banner */
+  .course-banner {
+    text-align: center;
+    padding: 8px;
+    margin-bottom: 12px;
+    background: #1a2a5c;
+    border-radius: 8px;
+    display: none;
+  }
+  .course-banner.visible { display: block; }
+  .course-banner h2 {
+    font-family: 'Playfair Display', serif;
+    color: #fff;
+    font-size: 1.1em;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .course-banner .course-par {
+    color: #d4a017;
+    font-size: 0.75em;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  /* Section labels */
+  .section-label {
+    display: flex;
+    align-items: center;
+    margin: 6px 0 8px;
+  }
+  .section-label span {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #1a2a5c;
+    white-space: nowrap;
+    padding-right: 12px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(to right, #d4a017, transparent);
+  }
+
+  /* ── SCORECARD TABLE ── */
+  .scorecard {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 4px;
+    table-layout: fixed;
+    font-size: 0.8em;
+  }
+
+  .scorecard th, .scorecard td {
+    text-align: center;
+    border: 1px solid #bbb;
+    padding: 0;
+    vertical-align: middle;
+  }
+
+  /* Label column */
+  .scorecard .label-col {
+    width: 42px;
+    min-width: 42px;
+    font-weight: 700;
+    font-size: 0.75em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Total column */
+  .scorecard .total-col {
+    width: 44px;
+    min-width: 44px;
+  }
+
+  /* Hole header row */
+  .scorecard .row-hole th {
+    background: #333;
+    color: #fff;
+    font-weight: 700;
+    padding: 6px 0;
+    font-size: 1em;
+  }
+  .scorecard .row-hole .label-col {
+    background: #333;
+    color: #fff;
+    font-size: 0.7em;
+  }
+  .scorecard .row-hole .total-col {
+    background: #333;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  /* Yardage rows */
+  .scorecard .row-yellow td { background: #f5d800; color: #333; font-weight: 600; padding: 4px 0; }
+  .scorecard .row-yellow .label-col { background: #f5d800; color: #333; }
+  .scorecard .row-white td { background: #fff; color: #333; font-weight: 500; padding: 4px 0; }
+  .scorecard .row-white .label-col { background: #fff; color: #333; }
+  .scorecard .row-blue td { background: #4a90d9; color: #fff; font-weight: 600; padding: 4px 0; }
+  .scorecard .row-blue .label-col { background: #4a90d9; color: #fff; }
+
+  /* Par row */
+  .scorecard .row-par td {
+    background: #e8e8e8;
+    font-weight: 700;
+    padding: 5px 0;
+    font-size: 1.05em;
+    color: #222;
+  }
+  .scorecard .row-par .label-col { background: #e8e8e8; color: #222; }
+  .scorecard .row-par .par3 { background: #90d990; color: #1a5c1a; }
+  .scorecard .row-par .par5 { background: #f0a0a0; color: #8b1a1a; }
+
+  /* Points row (Stableford, live) */
+  .scorecard .row-pts td { background: #fdf6e0; color: #1a2a5c; font-weight: 700; padding: 4px 0; }
+  .scorecard .row-pts .label-col { background: #d4a017; color: #1a2a5c; }
+  .scorecard .row-pts td.pts-0 { color: #c0392b; }
+  .scorecard .row-pts td.pts-3 { color: #1a7a1a; }
+  .scorecard .row-hcp td .shots { color: #d4a017; font-weight: 900; margin-left: 1px; }
+  .course-banner .player-hcp { color: #fff; font-size: 0.75em; font-weight: 600; margin-top: 3px; }
+  .total-box.points .value { color: #fff; }
+
+  /* S.I. row */
+  .scorecard .row-hcp td { background: #f0f0f0; color: #666; font-size: 0.85em; padding: 3px 0; }
+  .scorecard .row-hcp .label-col { background: #f0f0f0; color: #666; }
+
+  /* Score row (input) */
+  .scorecard .row-score td {
+    background: #fff;
+    padding: 0;
+    height: 40px;
+  }
+  .scorecard .row-score .label-col {
+    background: #1a2a5c;
+    color: #fff;
+    font-size: 0.7em;
+  }
+  .scorecard .row-score .total-col {
+    background: #fdf6e0;
+    font-weight: 700;
+    font-size: 1.2em;
+    color: #1a2a5c;
+  }
+
+  .scorecard input[type="number"] {
+    width: 100%;
+    height: 100%;
+    padding: 8px 0;
+    border: none;
+    text-align: center;
+    font-size: 1.1em;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    color: #1a2a5c;
+    background: transparent;
+  }
+  .scorecard input[type="number"]:focus {
+    outline: none;
+    background: #e8edf8;
+  }
+  .scorecard input[type="number"]::-webkit-inner-spin-button,
+  .scorecard input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .scorecard input[type="number"] { -moz-appearance: textfield; }
+
+  /* Score coloring based on par */
+  .score-eagle { background: #ffd700 !important; }
+  .score-birdie { background: #c8f0c8 !important; }
+  .score-bogey { background: #ffe0cc !important; }
+  .score-double { background: #ffb3b3 !important; }
+
+  /* Totals bar */
+  .totals-bar {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin: 16px 0 8px;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, #1a2a5c, #2a3f7a);
+    border-radius: 10px;
+    transition: background 0.4s ease;
+  }
+  .total-box { text-align: center; }
+  .total-box .label {
+    font-size: 0.6em;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #a0b0d4;
+    margin-bottom: 2px;
+  }
+  .total-box .value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6em;
+    font-weight: 900;
+    color: #d4a017;
+    min-width: 50px;
+  }
+  .total-box .vs-par {
+    font-size: 0.65em;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .vs-par.under { color: #5bff5b; }
+  .vs-par.over { color: #ff8888; }
+  .vs-par.even { color: #a0b0d4; }
+
+  /* Declaration */
+  .declaration-text {
+    font-size: 0.95em;
+    font-weight: 600;
+    color: #333;
+    font-style: italic;
+    padding: 12px 16px;
+    background: #fdf6e0;
+    border-left: 4px solid #d4a017;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 4px;
+  }
+
+  /* Buttons */
+  .actions { display: flex; gap: 10px; margin-top: 20px; justify-content: center; }
+  .btn {
+    padding: 13px 28px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+  }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+  .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+  .btn-primary { background: linear-gradient(135deg, #d4a017, #c09315); color: #1a2a5c; }
+  .btn-danger { background: #fff; color: #c0392b; border: 2px solid #f0d0cc; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    opacity: 0;
+    transition: all 0.4s ease;
+    z-index: 1000;
+    max-width: 90vw;
+    text-align: center;
+    font-size: 0.9em;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .toast.success { background: #27ae60; color: #fff; }
+  .toast.error { background: #c0392b; color: #fff; }
+  .toast.info { background: #1a2a5c; color: #fff; }
+
+  /* Spinner */
+  .spinner-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(26,42,92,0.6); z-index: 999;
+    justify-content: center; align-items: center; flex-direction: column; gap: 16px;
+  }
+  .spinner-overlay.active { display: flex; }
+  .spinner {
+    width: 48px; height: 48px;
+    border: 4px solid rgba(255,255,255,0.3);
+    border-top-color: #d4a017; border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  .spinner-text { color: #fff; font-weight: 600; font-size: 1.1em; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Duplicate warning */
+  .duplicate-warning {
+    display: none; background: #fff3cd; border: 2px solid #d4a017;
+    border-radius: 8px; padding: 10px 14px; margin-bottom: 14px;
+    font-size: 0.8em; color: #856404; line-height: 1.4;
+  }
+  .duplicate-warning strong { color: #1a2a5c; }
+  .duplicate-warning .close-warning {
+    float: right; cursor: pointer; font-weight: 700; font-size: 1.2em; color: #856404;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 700px) {
+    body { padding: 4px; }
+    .header { padding: 14px 10px; border-radius: 10px 10px 0 0; }
+    .header h1 { font-size: 1.5em; letter-spacing: 1px; }
+    .header .subtitle { font-size: 0.7em; letter-spacing: 2px; }
+    .golf-icon { font-size: 1.1em; margin: 0 3px; }
+    .card-body { padding: 12px 8px 20px; border-radius: 0 0 10px 10px; }
+    .info-row { flex-direction: column; gap: 10px; }
+
+    .scorecard { font-size: 0.7em; }
+    .scorecard .label-col { width: 30px; min-width: 30px; font-size: 0.65em; }
+    .scorecard .total-col { width: 34px; min-width: 34px; }
+    .scorecard .row-score td { height: 36px; }
+    .scorecard input[type="number"] { font-size: 1.05em; padding: 6px 0; }
+
+    .totals-bar { gap: 12px; padding: 12px 10px; }
+    .total-box .value { font-size: 1.4em; }
+    .total-box .label { font-size: 0.55em; }
+    .declaration-text { font-size: 0.85em; padding: 10px 12px; }
+    .btn { padding: 12px 20px; font-size: 0.85em; }
+    .course-banner h2 { font-size: 0.9em; }
+  }
+
+  @media (max-width: 380px) {
+    body { padding: 2px; }
+    .card-body { padding: 8px 5px 16px; }
+    .scorecard { font-size: 0.6em; }
+    .scorecard .label-col { width: 26px; min-width: 26px; font-size: 0.6em; }
+    .scorecard .total-col { width: 30px; min-width: 30px; }
+    .scorecard input[type="number"] { font-size: 0.95em; }
+  }
+
+  /* ── TABS ── */
+  .tab-bar {
+    display: flex;
+    background: #0d1830;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex: 1 0 auto;
+    padding: 12px 14px;
+    border: none;
+    border-bottom: 3px solid transparent;
+    background: transparent;
+    color: #a0b0d4;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8em;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .tab-btn:hover { color: #fff; }
+  .tab-btn.active { color: #d4a017; border-bottom-color: #d4a017; background: #1a2a5c; }
+  .tab-page { display: none; }
+  .tab-page.active { display: block; }
+
+  /* ── DAY PAGES ── */
+  .day-course {
+    text-align: center;
+    padding: 8px;
+    margin-bottom: 12px;
+    background: #1a2a5c;
+    border-radius: 8px;
+  }
+  .day-course h2 {
+    font-family: 'Playfair Display', serif;
+    color: #fff;
+    font-size: 1.1em;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .day-course .day-course-name {
+    color: #d4a017;
+    font-size: 0.75em;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .leaderboard {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+  }
+  .leaderboard th {
+    background: #333;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.75em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 8px 6px;
+  }
+  .leaderboard td {
+    border-bottom: 1px solid #e0e4ee;
+    padding: 9px 6px;
+    text-align: center;
+    color: #333;
+  }
+  .leaderboard tr:nth-child(even) td { background: #f5f7fc; }
+  .leaderboard .lb-player { text-align: left; font-weight: 600; color: #1a2a5c; }
+  .leaderboard th.lb-player { color: #fff; }
+  .leaderboard .lb-pts { font-weight: 700; color: #1a2a5c; background: #fdf6e0 !important; }
+  .leaderboard th.lb-pts { background: #333 !important; color: #d4a017; }
+  .leaderboard .lb-idx { display: block; font-size: 10px; font-weight: 400; color: #8a93a8; white-space: nowrap; }
+  .day-note {
+    font-size: 0.75em;
+    color: #888;
+    text-align: center;
+    margin-top: 12px;
+  }
+
+  /* ── PIN GATE (tap the title for the score card) ── */
+  .header h1 { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .pin-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 1100;
+    background: rgba(13,24,48,0.92);
+    align-items: center; justify-content: center; padding: 16px;
+  }
+  .pin-overlay.open { display: flex; }
+  .pin-box {
+    width: 100%; max-width: 300px;
+    background: #1a2a5c; border: 2px solid #d4a017; border-radius: 14px;
+    padding: 18px 18px 16px; text-align: center;
+  }
+  .pin-box h2 { font-family: 'Playfair Display', serif; color: #d4a017; font-size: 1.15em; letter-spacing: 1px; }
+  .pin-box p { color: #a0b0d4; font-size: 0.8em; margin: 4px 0 14px; }
+  .pin-box input {
+    width: 100%; padding: 12px; border: 2px solid #c8cfe0; border-radius: 10px;
+    font-family: 'Inter', sans-serif; font-size: 1.6em; font-weight: 700;
+    letter-spacing: 12px; text-align: center; color: #1a2a5c; background: #fff;
+  }
+  .pin-box input:focus { outline: none; border-color: #d4a017; }
+  .pin-error { color: #ff8888; font-size: 0.8em; font-weight: 600; min-height: 1.3em; margin-top: 8px; }
+  .pin-actions { display: flex; gap: 10px; margin-top: 8px; }
+  .pin-actions .btn { flex: 1; padding: 11px 0; }
+  .pin-box.shake { animation: pinShake 0.35s; }
+  @keyframes pinShake { 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
+
+  /* ── HOME PAGE: tour badge ── */
+  .home-badge { max-width: 340px; margin: 0 auto; }
+  .home-badge img { display: block; width: 100%; height: auto; }
+
+  /* ── HOME PAGE: champions feature ── */
+  .champ-feature {
+    max-width: 520px; margin: 0 auto;
+    background: #1a2a5c; border: 2px solid #d4a017; border-radius: 14px;
+    overflow: hidden;
+  }
+  .champ-feature h2 {
+    font-family: 'Playfair Display', serif; color: #d4a017;
+    text-align: center; letter-spacing: 2px; text-transform: uppercase;
+    font-size: 1.1em; padding: 12px 12px 10px;
+  }
+  .champ-photo {
+    display: block; width: 100%; padding: 0; border: none; cursor: zoom-in;
+    height: min(29vh, 230px);
+    background: #0d1830 center 36% / cover no-repeat;
+  }
+  .champ-hint { text-align: center; font-size: 0.65em; color: #a0b0d4; padding-top: 6px; }
+
+  /* ── HOME PAGE: past tour photo ── */
+  .tour-feature { margin-top: 18px; }
+  .tour-photo { display: block; width: 100%; padding: 0; border: none; background: #0d1830; cursor: zoom-in; }
+  .tour-photo img { display: block; width: 100%; height: auto; }
+  .photo-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 1100;
+    background: rgba(13,24,48,0.95);
+    align-items: center; justify-content: center; padding: 16px;
+  }
+  .photo-overlay.open { display: flex; }
+  .photo-overlay img { max-width: 100%; max-height: 100%; border: 2px solid #d4a017; border-radius: 10px; }
+
+  /* ── HOME PAGE: sponsors ── */
+  .sponsors { max-width: 520px; margin: 18px auto 0; }
+  /* All in one row on wider screens; two per row on phones, an odd last one centred. */
+  .sponsor-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+  .sponsor-grid .sponsor { flex: 1 1 0; min-width: 0; }
+  @media (max-width: 700px) { .sponsor-grid .sponsor { flex: 0 0 calc(50% - 6px); } }
+  .sponsor {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+    padding: 16px 10px 12px;
+    background: #fff; border: 2px solid #e0e4ee; border-radius: 12px;
+    text-decoration: none;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .sponsor:hover { border-color: #d4a017; transform: translateY(-1px); }
+  .sponsor img { display: block; max-width: 100%; height: 44px; object-fit: contain; }
+  .sponsor span { font-size: 0.75em; font-weight: 700; color: #1a2a5c; letter-spacing: 0.5px; }
+  .champ-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 1100;
+    background: rgba(13,24,48,0.92);
+    align-items: center; justify-content: center;
+    padding: 16px;
+  }
+  .champ-overlay.open { display: flex; }
+  .champ-card {
+    position: relative;
+    max-width: 420px; width: 100%; max-height: 100%;
+    display: flex; flex-direction: column;
+    background: #1a2a5c; border: 2px solid #d4a017; border-radius: 14px;
+    overflow: hidden;
+  }
+  .champ-card h2 {
+    font-family: 'Playfair Display', serif; color: #d4a017;
+    text-align: center; letter-spacing: 2px; text-transform: uppercase;
+    font-size: 1.1em; padding: 12px 40px 10px;
+  }
+  .champ-card img { display: block; width: 100%; min-height: 0; flex: 1 1 auto; object-fit: cover; object-position: center 45%; }
+  .champ-names { display: flex; gap: 8px; padding: 12px 14px 14px; }
+  .champ-name { flex: 1; text-align: center; color: #fff; }
+  .champ-name .role { font-size: 0.65em; color: #a0b0d4; text-transform: uppercase; letter-spacing: 1.5px; }
+  .champ-name .who { font-family: 'Playfair Display', serif; font-size: 1.05em; font-weight: 700; margin-top: 2px; }
+  .champ-name.current .who { color: #d4a017; }
+  .champ-name .side { font-size: 0.65em; color: #a0b0d4; margin-top: 1px; }
+  .champ-close {
+    position: absolute; top: 6px; right: 8px;
+    border: none; background: none; color: #fff;
+    font-size: 1.6em; line-height: 1; cursor: pointer; padding: 4px;
+  }
+
+  /* ── HEADER ICONS / NOTIFICATIONS ── */
+  .header-icons { position: absolute; top: 10px; right: 12px; display: flex; gap: 8px; }
+  .icon-btn {
+    position: relative;
+    width: 34px; height: 34px; padding: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(212,160,23,0.5);
+    background: rgba(255,255,255,0.08);
+    color: #d4a017;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .icon-btn:hover { background: rgba(255,255,255,0.18); }
+  .icon-btn svg { width: 18px; height: 18px; }
+  .badge {
+    display: none;
+    position: absolute; top: -5px; right: -5px;
+    min-width: 17px; height: 17px; padding: 0 4px;
+    border-radius: 9px;
+    background: #e74c3c; color: #fff;
+    font-size: 10px; font-weight: 700; line-height: 17px; text-align: center;
+  }
+  .badge.show { display: block; }
+  .notif-panel {
+    display: none;
+    position: absolute; top: 52px; right: 12px; z-index: 50;
+    width: min(320px, calc(100vw - 32px)); max-height: 60vh; overflow-y: auto;
+    background: #fff; border-radius: 10px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+    text-align: left;
+  }
+  .notif-panel.open { display: block; }
+  .notif-panel h3 {
+    font-family: 'Playfair Display', serif; color: #1a2a5c; font-size: 1em;
+    padding: 12px 14px 8px; border-bottom: 2px solid #d4a017;
+  }
+  .notif-item { padding: 10px 14px; border-bottom: 1px solid #eee; }
+  .notif-item.new { background: #fdf6e0; }
+  .notif-time { font-size: 0.7em; color: #888; margin-bottom: 2px; }
+  .notif-msg { font-size: 0.85em; color: #1a2a5c; white-space: pre-wrap; }
+  .notif-empty { padding: 14px; font-size: 0.85em; color: #888; }
+  .notif-banner {
+    display: none;
+    position: relative;
+    padding: 10px 40px 10px 14px;
+    background: #d4a017; color: #1a2a5c;
+    font-size: 0.85em; font-weight: 600;
+  }
+  .notif-banner.show { display: block; }
+  .notif-banner .close {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    border: none; background: none; color: #1a2a5c;
+    font-size: 1.4em; line-height: 1; cursor: pointer; padding: 4px;
+  }
+
+  @media (max-width: 700px) {
+    .tab-btn { flex: 1 1 auto; padding: 10px 4px; font-size: 0.65em; letter-spacing: 0.3px; }
+    /* keep the title clear of the home/bell icons */
+    .header { padding-left: 84px; padding-right: 84px; }
+    .header h1 { font-size: 1.3em; letter-spacing: 0.5px; white-space: nowrap; }
+    .header .golf-icon { margin: 0 1px; }
+    .header .subtitle { letter-spacing: 1px; white-space: nowrap; }
+    .header-icons { top: 8px; right: 8px; gap: 6px; }
+    .icon-btn { width: 32px; height: 32px; }
+    .notif-panel { top: 46px; right: 8px; }
+    .leaderboard { font-size: 0.8em; }
+    .leaderboard.overall td, .leaderboard.overall th { padding-left: 2px; padding-right: 2px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="spinner-overlay" id="spinnerOverlay">
+  <div class="spinner"></div>
+  <div class="spinner-text">Submitting score card...</div>
+</div>
+
+<div class="card-container">
+  <div class="header">
+    <h1 id="siteTitle" role="button" tabindex="0" aria-label="Open the score card (PIN needed)"><span class="golf-icon">&#9971;</span> <span id="eventTitle"></span> <span class="golf-icon">&#9971;</span></h1>
+    <div class="subtitle" id="eventSubtitle"></div>
+    <div class="header-icons">
+      <button class="icon-btn" id="homeBtn" aria-label="Home" title="Home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+      </button>
+      <button class="icon-btn" id="bellBtn" aria-label="Notifications" title="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="badge" id="notifBadge"></span>
+      </button>
+    </div>
+    <div class="notif-panel" id="notifPanel"></div>
+  </div>
+
+  <div class="tab-bar" id="tabBar">
+    <button class="tab-btn active" data-tab="page-home">Home</button>
+    <button class="tab-btn" data-tab="page-overall">Overall</button>
+  </div>
+
+  <div class="notif-banner" id="notifBanner">
+    <span id="notifBannerText"></span>
+    <button class="close" id="notifBannerClose" aria-label="Close">&times;</button>
+  </div>
+
+  <!-- HOME -->
+  <div class="card-body tab-page active" id="page-home">
+    <!-- filled by renderHome() from config.js: badge, champions, photos, sponsors -->
+    <div id="homeContent"></div>
+  </div>
+
+  <div class="card-body tab-page" id="page-card">
+    <div class="duplicate-warning" id="duplicateWarning">
+      <span class="close-warning" onclick="this.parentElement.style.display='none'">&times;</span>
+      <strong>Heads up!</strong> A score card for <span id="dupPlayer"></span> on <span id="dupCourse"></span> has already been submitted.
+    </div>
+
+    <!-- Player / Course / Date -->
+    <div class="info-row">
+      <div class="info-group">
+        <label>Player Name</label>
+        <select id="playerName">
+          <option value="">-- Select Player --</option>
+        </select>
+      </div>
+      <div class="info-group">
+        <label>Course Played</label>
+        <select id="coursePlayed">
+          <option value="">-- Select Course --</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Course banner (shows when course selected) -->
+    <div class="course-banner" id="courseBanner">
+      <h2 id="courseTitle"></h2>
+      <div class="course-par" id="coursePar"></div>
+      <div class="player-hcp" id="playerHcp"></div>
+    </div>
+
+    <!-- FRONT 9 -->
+    <div class="section-label"><span>Front 9</span></div>
+    <table class="scorecard" id="front9table">
+      <tbody id="front9body"></tbody>
+    </table>
+
+    <!-- BACK 9 -->
+    <div class="section-label" style="margin-top: 16px;"><span>Back 9</span></div>
+    <table class="scorecard" id="back9table">
+      <tbody id="back9body"></tbody>
+    </table>
+
+    <!-- Totals -->
+    <div class="totals-bar" id="totalsBar">
+      <div class="total-box">
+        <div class="label">Front 9</div>
+        <div class="value" id="summaryFront">-</div>
+        <div class="vs-par" id="vsParFront"></div>
+      </div>
+      <div class="total-box">
+        <div class="label">Back 9</div>
+        <div class="value" id="summaryBack">-</div>
+        <div class="vs-par" id="vsParBack"></div>
+      </div>
+      <div class="total-box">
+        <div class="label">Total</div>
+        <div class="value" id="summaryTotal">-</div>
+        <div class="vs-par" id="vsParTotal"></div>
+      </div>
+      <div class="total-box points">
+        <div class="label">Points</div>
+        <div class="value" id="summaryPts">-</div>
+        <div class="vs-par even" id="ptsSplit"></div>
+      </div>
+    </div>
+
+    <!-- Declaration -->
+    <div class="declaration">
+      <div class="section-label" style="margin-top: 20px;"><span>Declaration</span></div>
+      <p class="declaration-text">I confirm the scores that I have submitted are correct...........and final!</p>
+      <div class="info-group" style="max-width: 340px; margin-top: 12px;">
+        <label>Submitted by</label>
+        <select id="submittedBy">
+          <option value="">-- Select Name --</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="submitBtn" onclick="submitCard()">Submit Score Card</button>
+      <button class="btn btn-danger" onclick="resetCard()">Clear</button>
+    </div>
+  </div>
+
+  <!-- DAY 1-5 (built by buildDayPages) -->
+  <div id="dayPages"></div>
+</div>
+
+<div class="pin-overlay" id="pinOverlay">
+  <form class="pin-box" id="pinBox" autocomplete="off">
+    <h2>Score Card</h2>
+    <p>Enter the 4-digit PIN</p>
+    <input type="password" id="pinInput" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-label="PIN">
+    <div class="pin-error" id="pinError"></div>
+    <div class="pin-actions">
+      <button type="button" class="btn btn-danger" id="pinCancel">Cancel</button>
+      <button type="submit" class="btn btn-primary">OK</button>
+    </div>
+  </form>
+</div>
+
+<div class="photo-overlay" id="photoOverlay">
+  <button class="champ-close" id="photoClose" aria-label="Close">&times;</button>
+  <img id="photoOverlayImg" alt="">
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="config.js"></script>
+<script>
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  CONFIGURATION                                              ║
+// ╚══════════════════════════════════════════════════════════════╝
+// Sheet web app URL and everything tour-specific: config.js (see backend/SETUP.md).
+const WEBAPP_URL = TOUR_CONFIG.webAppUrl;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  COURSE DATA - Add more courses here as needed              ║
+// ╚══════════════════════════════════════════════════════════════╝
+// Course library (yellow tees): config.js
+const COURSES = TOUR_CONFIG.courses;
+const DAYS = TOUR_CONFIG.schedule.length;
+
+// ── State ──
+let existingSubmissions = [];
+let currentCourse = null;
+
+// ── Build scorecard table for a 9-hole half ──
+function buildHalf(bodyId, holes, startIdx) {
+  const tbody = document.getElementById(bodyId);
+  const nine = holes.slice(startIdx, startIdx + 9);
+  const isBack = startIdx === 9;
+
+  // Calculate totals
+  const totYellow = nine.reduce((s, h) => s + h[1], 0);
+  const totPar    = nine.reduce((s, h) => s + h[2], 0);
+
+  const outIn = isBack ? "IN" : "OUT";
+
+  let html = "";
+
+  // Row: Hole numbers
+  html += '<tr class="row-hole">';
+  html += '<th class="label-col">Hole</th>';
+  nine.forEach(h => { html += '<th>' + h[0] + '</th>'; });
+  html += '<th class="total-col">' + outIn + '</th>';
+  html += '</tr>';
+
+  // Row: Yards (converted from meters)
+  html += '<tr class="row-yellow">';
+  html += '<td class="label-col">YDS</td>';
+  nine.forEach(h => { html += '<td>' + Math.round(h[1] * 1.0936) + '</td>'; });
+  html += '<td class="total-col">' + Math.round(totYellow * 1.0936) + '</td>';
+  html += '</tr>';
+
+  // Row: Par
+  html += '<tr class="row-par">';
+  html += '<td class="label-col">PAR</td>';
+  nine.forEach(h => {
+    let cls = "";
+    if (h[2] === 3) cls = ' class="par3"';
+    if (h[2] === 5) cls = ' class="par5"';
+    html += '<td' + cls + '>' + h[2] + '</td>';
+  });
+  html += '<td class="total-col">' + totPar + '</td>';
+  html += '</tr>';
+
+  // Row: S.I.
+  html += '<tr class="row-hcp">';
+  html += '<td class="label-col">S.I.</td>';
+  nine.forEach(h => { html += '<td id="si' + h[0] + '">' + h[3] + '</td>'; });
+  html += '<td class="total-col"></td>';
+  html += '</tr>';
+
+  // Row: Score (inputs)
+  html += '<tr class="row-score">';
+  html += '<td class="label-col">Score</td>';
+  nine.forEach((h, i) => {
+    const holeNum = h[0];
+    const tabIdx = holeNum;
+    html += '<td><input type="number" min="1" max="12" id="h' + holeNum + '" tabindex="' + tabIdx + '" data-par="' + h[2] + '"></td>';
+  });
+  const totalId = isBack ? "backTotal" : "frontTotal";
+  html += '<td class="total-col" id="' + totalId + '">-</td>';
+  html += '</tr>';
+
+  // Row: Stableford points (filled by recalc once the handicap is known)
+  html += '<tr class="row-pts">';
+  html += '<td class="label-col">Pts</td>';
+  nine.forEach(h => { html += '<td id="p' + h[0] + '"></td>'; });
+  html += '<td class="total-col" id="' + (isBack ? 'backPts' : 'frontPts') + '">-</td>';
+  html += '</tr>';
+
+  tbody.innerHTML = html;
+}
+
+// ── Build default scorecard (no course data) ──
+function buildDefaultHalf(bodyId, start) {
+  const tbody = document.getElementById(bodyId);
+  const isBack = start === 10;
+  const outIn = isBack ? "IN" : "OUT";
+
+  let html = '<tr class="row-hole"><th class="label-col">Hole</th>';
+  for (let i = start; i < start + 9; i++) html += '<th>' + i + '</th>';
+  html += '<th class="total-col">' + outIn + '</th></tr>';
+
+  html += '<tr class="row-score"><td class="label-col">Score</td>';
+  for (let i = start; i < start + 9; i++) {
+    html += '<td><input type="number" min="1" max="12" id="h' + i + '" tabindex="' + i + '"></td>';
+  }
+  const totalId = isBack ? "backTotal" : "frontTotal";
+  html += '<td class="total-col" id="' + totalId + '">-</td></tr>';
+
+  tbody.innerHTML = html;
+}
+
+// ── Render the scorecard for selected course ──
+function renderCourse(courseName) {
+  const course = COURSES[courseName];
+  const banner = document.getElementById('courseBanner');
+
+  if (course) {
+    currentCourse = course;
+    buildHalf('front9body', course.holes, 0);
+    buildHalf('back9body', course.holes, 9);
+
+    const totalPar = course.holes.reduce((s, h) => s + h[2], 0);
+    document.getElementById('courseTitle').textContent = course.name;
+    document.getElementById('coursePar').textContent = 'Par ' + totalPar + ' | Yellow Tees';
+    banner.classList.add('visible');
+  } else {
+    currentCourse = null;
+    buildDefaultHalf('front9body', 1);
+    buildDefaultHalf('back9body', 10);
+    banner.classList.remove('visible');
+  }
+
+  // Re-bind input listeners
+  bindInputListeners();
+  recalc();
+}
+
+// ── Bind input listeners ──
+function bindInputListeners() {
+  document.querySelectorAll('.scorecard input[type="number"]').forEach(input => {
+    input.addEventListener('input', () => {
+      let v = parseInt(input.value);
+      if (v > 12) input.value = 12;
+      if (v < 1 && input.value !== '') input.value = 1;
+      colorScore(input);
+      recalc();
+    });
+    input.addEventListener('keyup', () => {
+      if (input.value.length >= 1 && parseInt(input.value) >= 1) {
+        let next = input.closest('td').nextElementSibling;
+        if (next) {
+          let nextInput = next.querySelector('input');
+          if (nextInput) nextInput.focus();
+        } else if (input.id === 'h9') {
+          document.getElementById('h10').focus();
+        }
+      }
+    });
+  });
+}
+
+// ── Color score cells relative to par ──
+function colorScore(input) {
+  const par = parseInt(input.getAttribute('data-par'));
+  const val = parseInt(input.value);
+  const td = input.closest('td');
+  td.className = '';
+  if (!par || isNaN(val)) return;
+
+  const diff = val - par;
+  if (diff <= -2) td.className = 'score-eagle';
+  else if (diff === -1) td.className = 'score-birdie';
+  else if (diff === 1) td.className = 'score-bogey';
+  else if (diff >= 2) td.className = 'score-double';
+}
+
+// ── Recalculate totals ──
+function recalc() {
+  let front = 0, fCount = 0, back = 0, bCount = 0;
+  let frontPar = 0, backPar = 0;
+
+  for (let i = 1; i <= 9; i++) {
+    const el = document.getElementById('h' + i);
+    if (!el) continue;
+    let v = parseInt(el.value);
+    if (!isNaN(v)) { front += v; fCount++; }
+    const p = parseInt(el.getAttribute('data-par'));
+    if (!isNaN(p)) frontPar += p;
+  }
+  for (let i = 10; i <= 18; i++) {
+    const el = document.getElementById('h' + i);
+    if (!el) continue;
+    let v = parseInt(el.value);
+    if (!isNaN(v)) { back += v; bCount++; }
+    const p = parseInt(el.getAttribute('data-par'));
+    if (!isNaN(p)) backPar += p;
+  }
+
+  document.getElementById('frontTotal').textContent = fCount > 0 ? front : '-';
+  document.getElementById('backTotal').textContent = bCount > 0 ? back : '-';
+  document.getElementById('summaryFront').textContent = fCount > 0 ? front : '-';
+  document.getElementById('summaryBack').textContent = bCount > 0 ? back : '-';
+  document.getElementById('summaryTotal').textContent = (fCount + bCount) > 0 ? (front + back) : '-';
+
+  // vs Par display
+  if (currentCourse) {
+    setVsPar('vsParFront', front, frontPar, fCount === 9);
+    setVsPar('vsParBack', back, backPar, bCount === 9);
+    setVsPar('vsParTotal', front + back, frontPar + backPar, fCount + bCount === 18);
+  }
+  recalcPoints();
+}
+
+// ── Live Stableford points ──
+// Same maths as backend/Code.gs (shotsOnHole / stablefordPoints) - the test
+// suite checks the two agree. Handicaps + allowance come from the sheet.
+let hcpData = null;   // {handicaps: {player: hcp}, allowance}
+
+function shotsOnHole(ph, si) {
+  if (ph >= 0) return Math.floor(ph / 18) + (si <= ph % 18 ? 1 : 0);
+  const p = -ph;
+  const n = Math.floor(p / 18) + (si > 18 - p % 18 ? 1 : 0);
+  return n ? -n : 0;
+}
+function stablefordHole(par, si, ph, score) {
+  return Math.max(0, 2 + par + shotsOnHole(ph, si) - score);
+}
+// World Handicap System: course handicap = index x slope/113 + (course rating - par);
+// playing handicap = that x allowance, rounded once at the end (as Code.gs does).
+function courseHandicapExact(course, hcp) {
+  return hcp * course.slope / 113 + (course.cr - course.holes.reduce((a, h) => a + h[2], 0));
+}
+// Settings allowance as a fraction: accepts 95 or 0.95 (as Code.gs allowance()).
+function allowanceFactor(a) {
+  const v = Number(a);
+  return isNaN(v) || v <= 0 ? 1 : (v > 1.5 ? v / 100 : v);
+}
+// Playing handicap off an index at a course key; null if the course isn't known.
+function dayPlayingHandicap(courseKey, hcp, allow) {
+  return COURSES[courseKey] ? Math.round(courseHandicapExact(COURSES[courseKey], hcp) * allow) : null;
+}
+function playingHandicap(player) {
+  if (!hcpData || !(player in hcpData.handicaps) || !currentCourse) return null;
+  const allow = allowanceFactor(hcpData.allowance);
+  const courseKey = document.getElementById('coursePlayed').value;
+  const dayHcps = hcpData.byCourse[courseKey];
+  const hcp = dayHcps && player in dayHcps ? dayHcps[player] : hcpData.handicaps[player];
+  const exact = courseHandicapExact(currentCourse, hcp);
+  return { hcp: hcp, start: hcpData.handicaps[player], course: Math.round(exact), ph: Math.round(exact * allow) };
+}
+// 9 -> "9", 2 -> "2.0" once adjusted, -1 -> "+1.0" (plus handicap)
+function fmtHcp(h, adjusted) {
+  const v = adjusted ? Math.abs(h).toFixed(1) : String(Math.abs(h));
+  return (h < 0 ? '+' : '') + v;
+}
+
+function recalcPoints() {
+  const player = document.getElementById('playerName').value;
+  const line = document.getElementById('playerHcp');
+  const box = document.getElementById('summaryPts');
+  const split = document.getElementById('ptsSplit');
+  box.textContent = '-'; split.textContent = '';
+  if (!currentCourse) { line.textContent = ''; return; }
+
+  const h = player ? playingHandicap(player) : null;
+  if (!player) line.textContent = 'Pick a player to see Stableford points';
+  else if (!h) line.textContent = player + ' - handicap not loaded yet (needs signal)';
+  else {
+    const moved = h.hcp !== h.start;
+    line.textContent = player + ' \u00b7 HCP ' + fmtHcp(h.hcp, moved) + (moved ? ' (start ' + fmtHcp(h.start, false) + ')' : '') +
+      ' \u00b7 Course ' + fmtHcp(h.course, false) + ' \u00b7 Playing ' + fmtHcp(h.ph, false);
+  }
+
+  let f = 0, b = 0, any = false;
+  currentCourse.holes.forEach(([hole, , par, si]) => {
+    const cell = document.getElementById('p' + hole);
+    const siCell = document.getElementById('si' + hole);
+    const shots = h ? shotsOnHole(h.ph, si) : 0;
+    siCell.innerHTML = si + (shots > 0 ? '<span class="shots">' + '\u2022'.repeat(Math.min(shots, 3)) + '</span>' : '');
+    const score = parseInt(document.getElementById('h' + hole).value);
+    cell.className = '';
+    if (!h || isNaN(score)) { cell.textContent = ''; return; }
+    const pts = stablefordHole(par, si, h.ph, score);
+    cell.textContent = pts;
+    if (pts === 0) cell.className = 'pts-0';
+    if (pts >= 3) cell.className = 'pts-3';
+    any = true;
+    if (hole <= 9) f += pts; else b += pts;
+  });
+  document.getElementById('frontPts').textContent = any ? f : '-';
+  document.getElementById('backPts').textContent = any ? b : '-';
+  if (any) { box.textContent = f + b; split.textContent = f + ' + ' + b; }
+}
+
+function setVsPar(elId, score, par, complete) {
+  const el = document.getElementById(elId);
+  if (!complete || !par) { el.textContent = ''; return; }
+  const diff = score - par;
+  if (diff > 0) { el.textContent = '+' + diff; el.className = 'vs-par over'; }
+  else if (diff < 0) { el.textContent = diff; el.className = 'vs-par under'; }
+  else { el.textContent = 'E'; el.className = 'vs-par even'; }
+}
+
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (type || 'info');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 4000);
+}
+
+function setSubmitting(busy) {
+  document.getElementById('submitBtn').disabled = busy;
+  document.getElementById('spinnerOverlay').classList.toggle('active', busy);
+}
+
+// ── Course change ──
+document.getElementById('coursePlayed').addEventListener('change', function() {
+  renderCourse(this.value);
+  checkDuplicate();
+});
+
+// ── Player change ──
+document.getElementById('playerName').addEventListener('change', function() {
+  const player = this.value;
+  const sub = document.getElementById('submittedBy');
+  if (sub.value === player) sub.value = '';
+  Array.from(sub.options).forEach(opt => { opt.disabled = (opt.value && opt.value === player); });
+  checkDuplicate();
+  recalcPoints();
+});
+
+function checkDuplicate() {
+  const player = document.getElementById('playerName').value;
+  const course = document.getElementById('coursePlayed').value;
+  const w = document.getElementById('duplicateWarning');
+  if (player && course && existingSubmissions.find(s => s.player === player && s.course === course)) {
+    document.getElementById('dupPlayer').textContent = player;
+    document.getElementById('dupCourse').textContent = course;
+    w.style.display = 'block';
+  } else {
+    w.style.display = 'none';
+  }
+}
+
+// ── Submit ──
+// Sent as text/plain so the browser posts straight to Apps Script without a
+// CORS preflight, and the card is only cleared once the sheet says it saved.
+async function submitCard() {
+  if (WEBAPP_URL.includes("PASTE_")) { showToast('Setup required.', 'error'); return; }
+  const player = document.getElementById('playerName').value;
+  const course = document.getElementById('coursePlayed').value;
+  const submitter = document.getElementById('submittedBy').value;
+
+  if (!player || !course) { showToast('Please select a player and course.', 'error'); return; }
+  if (!submitter) { showToast('Please select who is submitting this card.', 'error'); return; }
+  if (submitter === player) { showToast('You cannot submit your own score card!', 'error'); return; }
+
+  for (let i = 1; i <= 18; i++) {
+    if (!document.getElementById('h' + i).value) {
+      showToast('Please fill in all 18 holes.', 'error'); return;
+    }
+  }
+
+  const pin = savedPin();
+  if (!pin) { openPinGate(); showToast('PIN needed again - enter it, then submit.', 'error'); return; }
+  const card = { player: player, course: course, submittedBy: submitter, scores: [], pin: pin };
+  for (let i = 1; i <= 18; i++) card.scores.push(parseInt(document.getElementById('h' + i).value));
+
+  setSubmitting(true);
+  const abort = new AbortController();
+  const timer = setTimeout(() => abort.abort(), 20000);
+  let reply;
+  try {
+    const res = await fetch(WEBAPP_URL, { method: 'POST', body: JSON.stringify(card), signal: abort.signal });
+    reply = await res.json();
+  } catch (e) {
+    reply = { ok: false, error: 'No connection. Your card is still here - try again when you have signal.' };
+  } finally {
+    clearTimeout(timer);
+    setSubmitting(false);
+  }
+
+  if (!reply.ok) {
+    if (reply.pinRejected) { store.set(KEY('pin'), ''); openPinGate(); }
+    showToast('Not saved: ' + reply.error, 'error');
+    return;
+  }
+
+  existingSubmissions.push({ player: player, course: course });
+  showToast('Score card saved!', 'success');
+  setTimeout(resetCardSilent, 1500);
+  const bar = document.getElementById('totalsBar');
+  bar.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
+  setTimeout(() => { bar.style.background = ''; }, 2500);
+  loadLeaderboard();
+}
+
+function resetCardSilent() {
+  document.getElementById('playerName').value = '';
+  document.getElementById('coursePlayed').value = '';
+  document.getElementById('submittedBy').value = '';
+  document.getElementById('duplicateWarning').style.display = 'none';
+  renderCourse('');
+}
+
+function resetCard() {
+  if (!confirm('Clear all scores?')) return;
+  document.getElementById('playerName').value = '';
+  document.getElementById('coursePlayed').value = '';
+  document.getElementById('submittedBy').value = '';
+  document.getElementById('duplicateWarning').style.display = 'none';
+  renderCourse('');
+  showToast('Score card cleared.', 'info');
+}
+
+// ── Day pages: Stableford leaderboard per day, filled from the sheet ──
+function buildDayPages() {
+  let html = '';
+  for (let d = 1; d <= DAYS; d++) {
+    html += '<div class="card-body tab-page" id="page-day' + d + '">';
+    html += '<div class="day-course"><h2>Day ' + d + '</h2>';
+    html += '<div class="day-course-name" id="dayCourse' + d + '">Course: TBC</div></div>';
+    html += '<div class="section-label"><span>Stableford Leaderboard</span></div>';
+    html += '<table class="leaderboard"><thead><tr>';
+    html += '<th>Pos</th><th class="lb-player">Player</th><th>HCP</th><th>Out</th><th>In</th><th class="lb-pts">Points</th>';
+    html += '</tr></thead><tbody id="dayBody' + d + '"></tbody></table>';
+    html += '<p class="day-note" id="dayNote' + d + '"></p>';
+    html += '</div>';
+  }
+
+  html += '<div class="card-body tab-page" id="page-overall">';
+  html += '<div class="day-course"><h2>Overall</h2>';
+  html += '<div class="day-course-name">Daily finishing positions added up - lowest total wins</div></div>';
+  html += '<div class="section-label"><span>Overall Leaderboard</span></div>';
+  html += '<table class="leaderboard overall"><thead><tr><th>Pos</th><th class="lb-player">Player</th><th>Start</th><th>Finish</th>';
+  for (let d = 1; d <= DAYS; d++) html += '<th>D' + d + '</th>';
+  html += '<th class="lb-pts">Total</th></tr></thead><tbody id="overallBody"></tbody></table>';
+  html += '<p class="day-note" id="overallNote"></p>';
+  html += '</div>';
+
+  document.getElementById('dayPages').innerHTML = html;
+  for (let d = 1; d <= DAYS; d++) renderDay(d, null);
+  renderOverall([]);
+}
+
+// ── Overall: each played day's finishing position is your points for that day.
+// No card on a played day = last place (field size). Lowest total wins. Level
+// for 1st: countback on the day's Stableford points, last day first, back to Day 1.
+// Level anywhere else: most Stableford points across the days. Still level = share the spot.
+function renderOverall(days) {
+  const players = Array.from(document.getElementById('playerName').options)
+    .map(o => o.value).filter(Boolean);
+  const played = days.map(d => !!(d && d.course && d.rows && d.rows.some(r => r.total !== null)));
+  const field = players.length;
+
+  const rows = players.map(p => {
+    const dayPos = days.slice(0, DAYS).map((d, i) => {
+      if (!played[i]) return null;
+      const r = d.rows.find(r => r.player === p);
+      return r && r.pos !== null ? r.pos : field;
+    });
+    const stableford = days.slice(0, DAYS).reduce((s, d, i) => {
+      const r = played[i] ? d.rows.find(r => r.player === p) : null;
+      return s + (r && r.total !== null ? r.total : 0);
+    }, 0);
+    const dayPts = Array.from({ length: DAYS }, (_, i) => {
+      const r = played[i] ? days[i].rows.find(r => r.player === p) : null;
+      return r && r.total !== null ? r.total : 0;
+    });
+    // Index at the start of the tour (Day 1) and the one played off on the last day.
+    const index = d => (days[d] && days[d].handicaps && p in days[d].handicaps ? days[d].handicaps[p] : null);
+    const counted = dayPos.filter(v => v !== null);
+    return { player: p, start: index(0), finish: index(DAYS - 1), dayPos: dayPos, dayPts: dayPts,
+             total: counted.length ? counted.reduce((a, b) => a + b, 0) : null, stableford: stableford };
+  });
+
+  const totals = rows.map(r => r.total).filter(v => v !== null);
+  const lead = totals.length ? Math.min.apply(null, totals) : null;
+  // Tie-break between two players on the same total: >0 means b goes ahead.
+  const split = (a, b) => {
+    if (a.total !== lead) return b.stableford - a.stableford;
+    for (let i = DAYS - 1; i >= 0; i--) if (a.dayPts[i] !== b.dayPts[i]) return b.dayPts[i] - a.dayPts[i];
+    return 0;
+  };
+  rows.sort((a, b) => {
+    if (a.total === null || b.total === null) return (a.total === null) - (b.total === null);
+    return (a.total - b.total) || split(a, b);
+  });
+  let pos = 0;
+  rows.forEach((r, i) => {
+    if (r.total === null) { r.pos = null; return; }
+    const prev = rows[i - 1];
+    if (!prev || prev.total !== r.total || split(prev, r) !== 0) pos = i + 1;
+    r.pos = pos;
+  });
+
+  const dash = v => (v === null || v === undefined ? '-' : v);
+  const idx = v => (v === null ? '-' : fmtHcp(v, !Number.isInteger(v)));
+  const tbody = document.getElementById('overallBody');
+  tbody.innerHTML = '';
+  rows.forEach(r => {
+    const tr = document.createElement('tr');
+    const cells = [dash(r.pos), r.player, idx(r.start), idx(r.finish)];
+    for (let i = 0; i < DAYS; i++) cells.push(dash(r.dayPos[i]));
+    cells.push(dash(r.total));
+    cells.forEach((v, i) => {
+      const td = document.createElement('td');
+      if (i === 1) td.className = 'lb-player';
+      if (i === cells.length - 1) td.className = 'lb-pts';
+      td.textContent = v;
+      // Total: the week's Stableford points underneath.
+      if (i === cells.length - 1 && r.total !== null) {
+        const pts = document.createElement('span');
+        pts.className = 'lb-idx';
+        pts.textContent = r.stableford + ' pts';
+        td.appendChild(pts);
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+
+  const n = played.filter(Boolean).length;
+  document.getElementById('overallNote').textContent = n
+    ? 'Start = index on Day 1, Finish = index played off on the last day; pts = Stableford points for the tour. ' + n + ' day' + (n > 1 ? 's' : '') + ' counted. No card on a played day = ' + field + '. Level for 1st: countback on day points, last day back to Day 1. Other level totals split on total Stableford points.'
+    : 'No days played yet.';
+}
+
+function renderDay(d, day, allow) {
+  const course = day && day.course ? day.course : '';
+  const courseName = COURSES[course] ? COURSES[course].name : course;
+  document.getElementById('dayCourse' + d).textContent = 'Course: ' + (courseName || 'TBC');
+
+  // No course scheduled (or sheet not reached yet): list players with blanks.
+  let rows = day && day.rows && day.rows.length ? day.rows : null;
+  if (!rows) {
+    rows = Array.from(document.getElementById('playerName').options)
+      .map(o => o.value).filter(Boolean)
+      .map(p => ({ pos: null, player: p, hcp: day && day.handicaps ? day.handicaps[p] : null, front: null, back: null, total: null }));
+  }
+  const dash = v => (v === null || v === undefined ? '-' : v);
+  const tbody = document.getElementById('dayBody' + d);
+  tbody.innerHTML = '';
+  rows.forEach(r => {
+    const tr = document.createElement('tr');
+    // HCP column: playing handicap at this day's course, index underneath.
+    const known = r.hcp !== null && r.hcp !== undefined;
+    const index = known ? fmtHcp(r.hcp, !Number.isInteger(r.hcp)) : '-';
+    const ph = known ? dayPlayingHandicap(course, r.hcp, allow || 1) : null;
+    [dash(r.pos), r.player, ph === null ? index : fmtHcp(ph, false), dash(r.front), dash(r.back), dash(r.total)].forEach((v, i) => {
+      const td = document.createElement('td');
+      if (i === 1) td.className = 'lb-player';
+      if (i === 5) td.className = 'lb-pts';
+      td.textContent = v;
+      if (i === 2 && ph !== null) {
+        const idx = document.createElement('span');
+        idx.className = 'lb-idx';
+        idx.textContent = 'index ' + index;
+        td.appendChild(idx);
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+
+  let note;
+  if (!course) note = 'Course TBC - no scores yet.';
+  else if (!rows.some(r => r.total !== null)) note = 'No cards in yet for this day.';
+  else note = 'Updated ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + '. Ties share the position.';
+  document.getElementById('dayNote' + d).textContent = note;
+}
+
+async function loadLeaderboard() {
+  if (WEBAPP_URL.includes("PASTE_")) return;
+  try {
+    const res = await fetch(WEBAPP_URL + '?action=leaderboard');
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    data.days.slice(0, DAYS).forEach((day, i) => renderDay(i + 1, day, allowanceFactor(data.allowance)));
+    renderOverall(data.days);
+    if (data.handicaps) {
+      // Each scheduled course -> the handicaps going into that day (first day it's played).
+      const byCourse = {};
+      data.days.forEach(d => { if (d.course && d.handicaps && !byCourse[d.course]) byCourse[d.course] = d.handicaps; });
+      hcpData = { handicaps: data.handicaps, allowance: data.allowance, byCourse: byCourse };
+      recalcPoints();
+    }
+    renderNotifications(data.notifications || []);
+  } catch (e) {
+    for (let d = 1; d <= DAYS; d++) {
+      document.getElementById('dayNote' + d).textContent = 'Could not reach the scores sheet - showing nothing new.';
+    }
+    document.getElementById('overallNote').textContent = 'Could not reach the scores sheet - showing nothing new.';
+  }
+}
+
+// ── Notifications (posted in the sheet's Notifications tab) ──
+// Per-phone memory of what's been seen / closed. Storage can be unavailable
+// (private mode), so every access is guarded and the page works without it.
+const KEY = k => (TOUR_CONFIG.id || 'tour') + ':' + k;
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+};
+const DAY_MS = 24 * 60 * 60 * 1000;
+let notifs = [];
+
+function renderNotifications(list) {
+  notifs = list;
+  const lastSeen = Number(store.get(KEY('notifSeen')) || 0);
+  const isNew = n => n.posted && Date.parse(n.posted) > lastSeen;
+
+  const unread = notifs.filter(isNew).length;
+  const badge = document.getElementById('notifBadge');
+  badge.textContent = unread > 9 ? '9+' : unread;
+  badge.classList.toggle('show', unread > 0);
+
+  const panel = document.getElementById('notifPanel');
+  panel.innerHTML = '<h3>Notifications</h3>';
+  if (!notifs.length) {
+    const p = document.createElement('div');
+    p.className = 'notif-empty';
+    p.textContent = 'No notifications yet.';
+    panel.appendChild(p);
+  }
+  notifs.forEach(n => {
+    const item = document.createElement('div');
+    item.className = 'notif-item' + (isNew(n) ? ' new' : '');
+    const time = document.createElement('div');
+    time.className = 'notif-time';
+    time.textContent = n.posted ? new Date(n.posted).toLocaleString([], { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+    const msg = document.createElement('div');
+    msg.className = 'notif-msg';
+    msg.textContent = n.message;
+    item.appendChild(time);
+    item.appendChild(msg);
+    panel.appendChild(item);
+  });
+
+  // Banner: newest notification under 24 hours old, unless closed on this phone.
+  const now = Date.now();
+  const fresh = notifs.find(n => n.posted && now - Date.parse(n.posted) < DAY_MS);
+  const banner = document.getElementById('notifBanner');
+  if (fresh && store.get(KEY('bannerClosed')) !== fresh.posted) {
+    document.getElementById('notifBannerText').textContent = fresh.message;
+    banner.dataset.posted = fresh.posted;
+    banner.classList.add('show');
+  } else {
+    banner.classList.remove('show');
+  }
+}
+
+document.getElementById('bellBtn').addEventListener('click', function(e) {
+  e.stopPropagation();
+  const panel = document.getElementById('notifPanel');
+  const opening = !panel.classList.contains('open');
+  panel.classList.toggle('open', opening);
+  if (opening) {
+    const newest = notifs.reduce((m, n) => Math.max(m, n.posted ? Date.parse(n.posted) : 0), 0);
+    store.set(KEY('notifSeen'), String(Math.max(newest, Number(store.get(KEY('notifSeen')) || 0))));
+    document.getElementById('notifBadge').classList.remove('show');
+    loadLeaderboard();
+  } else {
+    renderNotifications(notifs);
+  }
+});
+document.addEventListener('click', function(e) {
+  const panel = document.getElementById('notifPanel');
+  if (panel.classList.contains('open') && !panel.contains(e.target)) {
+    panel.classList.remove('open');
+    renderNotifications(notifs);
+  }
+});
+document.getElementById('notifBannerClose').addEventListener('click', function() {
+  store.set(KEY('bannerClosed'), document.getElementById('notifBanner').dataset.posted || '');
+  document.getElementById('notifBanner').classList.remove('show');
+});
+
+// ── Home photos: full screen on tap ──
+const photoOverlay = document.getElementById('photoOverlay');
+document.getElementById('homeContent').addEventListener('click', e => {
+  const btn = e.target.closest('[data-photo]');
+  if (!btn) return;
+  document.getElementById('photoOverlayImg').src = btn.dataset.photo;
+  document.getElementById('photoOverlayImg').alt = btn.getAttribute('aria-label') || '';
+  photoOverlay.classList.add('open');
+});
+document.getElementById('photoClose').addEventListener('click', () => photoOverlay.classList.remove('open'));
+photoOverlay.addEventListener('click', e => { if (e.target === photoOverlay) photoOverlay.classList.remove('open'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') photoOverlay.classList.remove('open'); });
+
+// ── PIN gate for the score card ──
+// The page only holds a salted SHA-256 of the PIN (the repo is public); the
+// scores sheet checks the real PIN on every card. A correct PIN is remembered
+// on this phone for 24 hours so markers aren't re-entering it per card.
+const PIN_HASH = TOUR_CONFIG.pinHash;
+const PIN_SALT = TOUR_CONFIG.pinSalt;
+const PIN_KEEP_MS = 24 * 60 * 60 * 1000;
+
+async function pinHash(pin) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(PIN_SALT + pin));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+function savedPin() {
+  try {
+    const v = JSON.parse(store.get(KEY('pin')) || 'null');
+    return v && v.until > Date.now() ? v.pin : '';
+  } catch (e) { return ''; }
+}
+function openPinGate() {
+  document.getElementById('pinError').textContent = '';
+  document.getElementById('pinInput').value = '';
+  document.getElementById('pinOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('pinInput').focus(), 50);
+}
+function closePinGate() { document.getElementById('pinOverlay').classList.remove('open'); }
+function openScoreCard() {
+  if (savedPin()) { showTab('page-card'); window.scrollTo(0, 0); }
+  else openPinGate();
+}
+
+document.getElementById('siteTitle').addEventListener('click', openScoreCard);
+document.getElementById('siteTitle').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openScoreCard(); } });
+document.getElementById('pinCancel').addEventListener('click', closePinGate);
+document.getElementById('pinOverlay').addEventListener('click', e => { if (e.target.id === 'pinOverlay') closePinGate(); });
+document.getElementById('pinBox').addEventListener('submit', async e => {
+  e.preventDefault();
+  const pin = document.getElementById('pinInput').value.trim();
+  if (await pinHash(pin) === PIN_HASH) {
+    store.set(KEY('pin'), JSON.stringify({ pin: pin, until: Date.now() + PIN_KEEP_MS }));
+    closePinGate();
+    showTab('page-card');
+    window.scrollTo(0, 0);
+  } else {
+    const box = document.getElementById('pinBox');
+    document.getElementById('pinError').textContent = 'Wrong PIN';
+    document.getElementById('pinInput').value = '';
+    box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
+  }
+});
+
+// ── Tabs ──
+function showTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === id));
+  document.querySelectorAll('.tab-page').forEach(p => p.classList.toggle('active', p.id === id));
+}
+document.getElementById('tabBar').addEventListener('click', function(e) {
+  const btn = e.target.closest('.tab-btn');
+  if (!btn) return;
+  showTab(btn.dataset.tab);
+  loadLeaderboard();
+});
+document.getElementById('homeBtn').addEventListener('click', function() {
+  showTab('page-home');
+  window.scrollTo(0, 0);
+});
+
+// ── Apply config.js: header, day tabs, dropdowns, Home ──
+function el(tag, attrs, kids) {
+  const e = document.createElement(tag);
+  Object.entries(attrs || {}).forEach(([k, v]) => (k === 'text' ? (e.textContent = v) : e.setAttribute(k, v)));
+  (kids || []).forEach(k => e.appendChild(k));
+  return e;
+}
+function applyConfig() {
+  const c = TOUR_CONFIG;
+  document.title = 'Golf Score Card - ' + c.title + (c.subtitle ? ' ' + c.subtitle : '');
+  document.getElementById('eventTitle').textContent = c.title;
+  document.getElementById('eventSubtitle').textContent = c.subtitle || '';
+  fitTitle();
+  window.addEventListener('resize', fitTitle);
+
+  const overallTab = document.querySelector('.tab-btn[data-tab="page-overall"]');
+  c.schedule.forEach((_, i) => overallTab.before(el('button', { class: 'tab-btn', 'data-tab': 'page-day' + (i + 1), text: 'Day ' + (i + 1) })));
+
+  ['playerName', 'submittedBy'].forEach(id => c.players.forEach(p => document.getElementById(id).appendChild(el('option', { text: p }))));
+  [...new Set(c.schedule)].forEach(k => document.getElementById('coursePlayed').appendChild(el('option', { text: k })));
+  renderHome();
+}
+// Shrink the header title until it fits between the corner icons (titles vary per customer).
+function fitTitle() {
+  const h1 = document.getElementById('siteTitle');
+  h1.style.fontSize = ''; h1.style.whiteSpace = '';
+  h1.querySelectorAll('.golf-icon').forEach(e => (e.style.display = ''));
+  let size = parseFloat(getComputedStyle(h1).fontSize);
+  while (h1.scrollWidth > h1.clientWidth && size > 15) {
+    size -= 1;
+    h1.style.fontSize = size + 'px';
+  }
+  if (h1.scrollWidth > h1.clientWidth) {   // very long title: two lines, no flags
+    h1.style.whiteSpace = 'normal';
+    h1.querySelectorAll('.golf-icon').forEach(e => (e.style.display = 'none'));
+  }
+}
+function renderHome() {
+  const c = TOUR_CONFIG, home = document.getElementById('homeContent');
+  home.innerHTML = '';
+  const hint = () => el('p', { class: 'champ-hint', text: 'Tap the photo to see it full size' });
+  if (c.badge) {
+    home.appendChild(el('div', { class: 'home-badge' }, [el('img', { src: c.badge.src, alt: c.badge.alt || c.title })]));
+    home.appendChild(el('p', { class: 'champ-hint', text: 'Leaderboards are on the Day tabs; tap the title for the score card.' }));
+  }
+  if (c.champions) {
+    const ch = c.champions;
+    const photo = el('button', { class: 'champ-photo', 'data-photo': ch.photo, 'aria-label': 'Champions photo' });
+    photo.style.backgroundImage = 'url("' + ch.photo + '")';
+    home.appendChild(el('div', { class: 'champ-feature' }, [
+      el('h2', { text: '\u{1F3C6} ' + (ch.title || 'Champions') }), photo,
+      el('div', { class: 'champ-names' }, [
+        el('div', { class: 'champ-name current' }, [el('div', { class: 'role', text: 'Current champion' }), el('div', { class: 'who', text: ch.current || '' })]),
+        el('div', { class: 'champ-name' }, [el('div', { class: 'role', text: 'Past champion' }), el('div', { class: 'who', text: ch.past || '' })])
+      ])
+    ]));
+    home.appendChild(hint());
+  }
+  (c.photos || []).forEach(ph => {
+    home.appendChild(el('div', { class: 'champ-feature tour-feature' }, [
+      el('h2', { text: ph.title || '' }),
+      el('button', { class: 'tour-photo', 'data-photo': ph.src, 'aria-label': ph.alt || ph.title || 'Photo' }, [el('img', { src: ph.src, alt: ph.alt || '', loading: 'lazy' })])
+    ]));
+    home.appendChild(hint());
+  });
+  if ((c.sponsors || []).length) {
+    home.appendChild(el('div', { class: 'sponsors' }, [
+      el('div', { class: 'section-label' }, [el('span', { text: 'Sponsors' })]),
+      el('div', { class: 'sponsor-grid' }, c.sponsors.map(sp => el('a', { class: 'sponsor', href: sp.url, target: '_blank', rel: 'noopener' },
+        [el('img', { src: sp.logo, alt: sp.name + ' logo' }), el('span', { text: sp.name })])))
+    ]));
+  }
+  if (!home.children.length) {
+    home.appendChild(el('div', { class: 'champ-feature' }, [el('h2', { text: c.title })]));
+    home.appendChild(el('p', { class: 'champ-hint', text: 'Leaderboards are on the Day tabs; tap the title for the score card.' }));
+  }
+}
+
+// ── Init ──
+applyConfig();
+buildDayPages();
+loadLeaderboard();
+setInterval(loadLeaderboard, 5 * 60 * 1000);                  // new scores + notifications
+setInterval(() => renderNotifications(notifs), 60 * 1000);     // banner expires at 24h
+buildDefaultHalf('front9body', 1);
+buildDefaultHalf('back9body', 10);
+bindInputListeners();
+</script>
+</body>
+</html>
