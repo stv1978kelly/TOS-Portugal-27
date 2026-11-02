@@ -1616,7 +1616,6 @@ function renderHome() {
   const hint = () => el('p', { class: 'champ-hint', text: 'Tap the photo to see it full size' });
   if (c.badge) {
     home.appendChild(el('div', { class: 'home-badge' }, [el('img', { src: c.badge.src, alt: c.badge.alt || c.title })]));
-    home.appendChild(el('p', { class: 'champ-hint', text: 'Leaderboards are on the Day tabs; tap the title for the score card.' }));
   }
   if (c.champions) {
     const ch = c.champions;
