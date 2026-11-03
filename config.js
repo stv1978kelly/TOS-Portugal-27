@@ -25,7 +25,7 @@ window.TOUR_CONFIG = {
 
   // Players, in the order they appear in the dropdowns.
   players: [
-    'Bernie', 'Paul', 'Mike', 'Dave W', 'Jay', 'Billy', 'Robbie', 'Steve', 'Dava', 'John'
+    'Bernie B', 'Paul G', 'Mike H', 'Dave W', 'Jay G', 'Billy R', 'Robbie F', 'Steve W', 'Dava', 'John T'
   ],
 
   // Day 1, Day 2, ... - course keys from the library below. The number of
