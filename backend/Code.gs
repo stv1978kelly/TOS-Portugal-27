@@ -46,7 +46,7 @@ const COURSES = {
 const DEFAULT_SCHEDULE = ["Salgados", "Vale do Lobo Royal", "Ombria"];
 
 const PLAYERS = [
-  "Bernie B", "Paul G", "Mike H", "Dave W", "Jay G", "Billy R", "Robbie F", "Steve W", "Dava", "John T"
+  "Bernie B", "Paul G", "Mike H", "Dave W", "Jay G", "Billy R", "Robbie F", "Steve W", "Dava", "John T", "Andrew H"
 ];
 
 const DAYS = DEFAULT_SCHEDULE.length;

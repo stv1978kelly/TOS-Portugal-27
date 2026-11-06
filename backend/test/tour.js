@@ -43,8 +43,8 @@ t('3 days: Salgados, Vale do Lobo Royal, Ombria; page schedule = script', () => 
   assert.deepStrictEqual(vm.runInContext('DEFAULT_SCHEDULE', ctx), cfg.schedule);
   assert.strictEqual(vm.runInContext('DAYS', ctx), 3);
 });
-t('the 10 players, page = script', () => {
-  assert.deepStrictEqual(cfg.players, ['Bernie B', 'Paul G', 'Mike H', 'Dave W', 'Jay G', 'Billy R', 'Robbie F', 'Steve W', 'Dava', 'John T']);
+t('the 11 players, page = script', () => {
+  assert.deepStrictEqual(cfg.players, ['Bernie B', 'Paul G', 'Mike H', 'Dave W', 'Jay G', 'Billy R', 'Robbie F', 'Steve W', 'Dava', 'John T', 'Andrew H']);
   assert.deepStrictEqual(vm.runInContext('PLAYERS', ctx), cfg.players);
 });
 t('page config: own id, title, badge, nothing carried over from another tour', () => {
@@ -82,7 +82,7 @@ t('page course handicap, playing handicap and Stableford = script, every course'
     }
   }
 });
-t('a fresh sheet: 10 players, 3-day schedule, course dropdown of the 3 courses', () => {
+t('a fresh sheet: 11 players, 3-day schedule, course dropdown of the 3 courses', () => {
   const c2 = makeContext({ real: true });
   vm.runInContext('ensureSheets()', c2);
   assert.deepStrictEqual(c2.__sheets.Players.data.slice(1).map(r => r[0]), cfg.players);
@@ -93,12 +93,12 @@ t('a full 3-day week through the real script: points, shared places, handicaps c
   const c2 = makeContext({ real: true });
   vm.runInContext('ensureSheets()', c2);
   c2.__props.CARD_PIN = '4321';   // dummy - the real PIN lives only in Script Properties
-  const start = { 'Bernie B': 17, 'Paul G': 9.9, 'Mike H': 24, 'Dave W': 12, 'Jay G': 6, 'Billy R': 20, 'Robbie F': 10, 'Steve W': 9.9, Dava: 15, 'John T': 28 };
+  const start = { 'Bernie B': 17, 'Paul G': 9.9, 'Mike H': 24, 'Dave W': 12, 'Jay G': 6, 'Billy R': 20, 'Robbie F': 10, 'Steve W': 9.9, Dava: 15, 'John T': 28, 'Andrew H': 11 };
   c2.__sheets.Players.data.slice(1).forEach(r => (r[1] = start[r[0]]));
   const post = b => JSON.parse(vm.runInContext('doPost', c2)({ postData: { contents: JSON.stringify(b) } }).body);
   const get = () => JSON.parse(vm.runInContext('doGet', c2)({ parameter: { action: 'leaderboard' } }).body);
   // Everyone plays to par plus a per-player number of bogeys, a different mix each day.
-  const extra = [[0, 3, 6, 1, 2, 9, 4, 5, 7, 8], [5, 0, 2, 8, 3, 1, 6, 9, 4, 7], [2, 6, 0, 4, 9, 3, 1, 7, 8, 5]];
+  const extra = [[0, 3, 6, 1, 2, 9, 4, 5, 7, 8, 3], [5, 0, 2, 8, 3, 1, 6, 9, 4, 7, 10], [2, 6, 0, 4, 9, 3, 1, 7, 8, 5, 6]];
   cfg.schedule.forEach((course, d) => cfg.players.forEach((p, n) => {
     const scores = gsCourses[course].par.map((par, h) => par + (h < extra[d][n] ? 1 : 0));
     assert.strictEqual(post({ player: p, course, submittedBy: p === 'John T' ? 'Steve W' : 'John T', scores, pin: '4321' }).ok, true, p + ' ' + course);
@@ -110,7 +110,7 @@ t('a full 3-day week through the real script: points, shared places, handicaps c
   const rate = h => (h < 10 ? 0.3 : h < 18 ? 0.5 : 0.7);
   const idx = Object.assign({}, start);
   lb.days.forEach(day => {
-    assert.strictEqual(day.rows.length, 10);
+    assert.strictEqual(day.rows.length, 11);
     day.rows.forEach(r => assert.strictEqual(r.hcp, idx[r.player], day.day + ' ' + r.player + ' index'));
     const pts = day.rows.map(r => r.total), best = Math.max(...pts), worst = Math.min(...pts);
     day.rows.forEach(r => {
